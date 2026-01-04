@@ -36,7 +36,7 @@ const SearchSnippets = ({
             currentPage
         }
       try {
-        const res = await axios.post("http://localhost:3000/api/searchsnippet", query);
+        const res = await axios.post("https://snippets-saas-production.vercel.app/api/searchsnippet", query);
         // console.log("Response after query: ", res.data.data.snippets)
         if(res && res.data){
             setSnippets(res.data.data.snippets);
