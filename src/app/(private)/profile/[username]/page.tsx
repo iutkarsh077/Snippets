@@ -16,6 +16,8 @@ import ImageCard, {
 import { DeleteFeed } from "../../../../../actions/DeleteFeed";
 import { useToast } from "@/hooks/use-toast";
 import { GetFeedForPublicProfile } from "../../../../../actions/GetFeedForPublicProfile";
+import { UserInformation } from "@/types/UserInfo";
+import SearchSnippets from "@/components/search/SnippetSearch";
 
 export default function PublicProfile() {
   const { username } = useParams();
@@ -34,12 +36,21 @@ export default function PublicProfile() {
   const [clickedReadMore, setClickedReadMore] = useState(false);
   const [showSnippets, setShowSnippets] = useState(true);
   const { toast } = useToast();
+  const [userInfo, setUserInfo] = useState<UserInformation>({
+    id: "",
+    name: "",
+    email: "",
+    username: "",
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchUserDetails = async () => {
     setLoading(true);
     try {
       const res = await GetDetailsForPublicProfile(username as string);
       const res2 = await GetPostForPublicProfile(username as string);
+      // console.log("User info for public profile: ", res);
       if (res2 && res2.data) {
         setSnippets(res2.data as any);
         // console.log(res2);
@@ -56,6 +67,13 @@ export default function PublicProfile() {
       setLocation(res.decodeCookieValue?.location as string);
       setBadges(res.decodeCookieValue?.badges as string[]);
       setUsername(res.decodeCookieValue?.username as string);
+
+      setUserInfo((prev) => ({
+        id: res?.decodeCookieValue?.id as string,
+        name: res?.decodeCookieValue?.name as string,
+        email: res?.decodeCookieValue?.email as string,
+        username: res?.decodeCookieValue?.username as string,
+      }));
     } catch (error) {
       // console.log(error);
     } finally {
@@ -202,7 +220,7 @@ export default function PublicProfile() {
           )}
         </motion.div>
       )}
-      
+
       <div className="flex  justify-around text-xl">
         <p
           onClick={() => {
@@ -229,21 +247,48 @@ export default function PublicProfile() {
           Feed
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-x-6 gap-y-14 mx-3 mt-10  ">
+      <div className="my-10">
         {showSnippets === true ? (
-          <>
-            {snippets
-              ?.sort(
-                (a: any, b: any) =>
-                  new Date(b.createdAt).getTime() -
-                  new Date(a.createdAt).getTime()
-              )
-              .map((snippet, index) => (
-                <div key={index}>
-                  <CodeCard snippet={snippet} />
-                </div>
+          <div className="flex flex-col items-center w-full">
+            <SearchSnippets
+              userInfo={userInfo}
+              loading={loading}
+              setSnippets={setSnippets}
+              currentPage={currentPage}
+              setTotalPages={setTotalPages}
+              setCurrentPage={setCurrentPage}
+              setIsLoading={setLoading}
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-x-6 gap-y-14 mx-3 mt-10  ">
+              {snippets
+                ?.sort(
+                  (a: any, b: any) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )
+                .map((snippet, index) => (
+                  <div key={index}>
+                    <CodeCard snippet={snippet} />
+                  </div>
+                ))}
+            </div>
+            <div className="flex gap-x-6 items-center mt-10">
+              {Array.from(
+                { length: Math.ceil(totalPages / 6) },
+                (v, i) => i + 1
+              ).map((item, index) => (
+                <p
+                  key={index}
+                  onClick={() => setCurrentPage(item)}
+                  className={`bg-black text-center px-2 rounded-md py-2 w-10 text-white dark:bg-white hover:cursor-pointer dark:text-black ${
+                    currentPage === item && "rotate-12"
+                  } `}
+                >
+                  {item}
+                </p>
               ))}
-          </>
+            </div>
+          </div>
         ) : (
           <>
             {cardData?.map((cardDataItems: ImageCardProps, index: number) => (
