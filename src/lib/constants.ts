@@ -5,15 +5,27 @@ export const LANGUAGE_VERSIONS = {
   java: "15.0.2",
   csharp: "6.12.0",
   php: "8.2.3",
-  c: "10.2.0",      
-  cpp: "10.2.0"     
+  c: "10.2.0",
+  cpp: "10.2.0",
+};
+
+/** Judge0 CE language_id values — must stay aligned with LANGUAGE_VERSIONS keys (see https://ce.judge0.com/languages). */
+export const JUDGE0_LANGUAGE_IDS: Record<keyof typeof LANGUAGE_VERSIONS, number> = {
+  javascript: 93,
+  typescript: 94,
+  python: 100,
+  java: 91,
+  csharp: 51,
+  php: 98,
+  c: 103,
+  cpp: 105,
 };
   
 export const CODE_SNIPPETS = {
   javascript: `\nfunction greet(name) {\n\tconsole.log("Hello, " + name + "!");\n}\n\ngreet("Alex");\n`,
   typescript: `\ntype Params = {\n\tname: string;\n}\n\nfunction greet(data: Params) {\n\tconsole.log("Hello, " + data.name + "!");\n}\n\ngreet({ name: "Alex" });\n`,
   python: `\ndef greet(name):\n\tprint("Hello, " + name + "!")\n\ngreet("Alex")\n`,
-  java: `\npublic class HelloWorld {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello World");\n\t}\n}\n`,
+  java: `\npublic class Main {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println("Hello World");\n\t}\n}\n`,
   csharp: 'using System;\n\nnamespace HelloWorld\n{\n\tclass Hello { \n\t\tstatic void Main(string[] args) {\n\t\t\tConsole.WriteLine("Hello World in C#");\n\t\t}\n\t}\n}\n',
   php: "<?php\n\n$name = 'Alex';\necho $name;\n",
   c: `#include <stdio.h>\n\nint main() {\n\tchar name[] = "Alex";\n\tprintf("Hello, %s!\\n", name);\n\treturn 0;\n}\n`,
