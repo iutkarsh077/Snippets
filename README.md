@@ -6,6 +6,8 @@ A full-stack Next.js application that combines code snippet sharing, AI-powered 
 
 [![snippet-1.png](https://i.postimg.cc/c1hMgQ7P/snippet-1.png)](https://postimg.cc/MXcjgfFY)
 
+![User_Screenshot](http://res.cloudinary.com/dakddv1pm/image/upload/v1784562540/posts/uhf0vlwguqeklyvvggsw.png)
+
 ## ✨ Features
 
 ### 📝 Code Snippets
